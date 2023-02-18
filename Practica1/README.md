@@ -4,7 +4,7 @@ Esta carpeta contiene el código y la documentación correspondiente a la Práct
 
 Los métodos implementados en esta práctica incluyen el método de Euler, el método de Euler mejorado (también conocido como método de Heun), el método de Runge-Kutta de segundo orden y el método de Runge-Kutta de cuarto orden.
 
-Además del código fuente de los métodos implementados, esta carpeta también contiene un archivo practica1.md (este archivo) que proporciona una breve introducción a la práctica, así como un resumen de los métodos utilizados.
+Además del código fuente de los métodos implementados, esta carpeta también contiene un archivo README.md (este archivo) que proporciona una breve introducción a la práctica, así como un resumen de los métodos utilizados.
 
 El objetivo de esta práctica es que el estudiante adquiera conocimientos prácticos sobre la implementación y el uso de métodos numéricos para la resolución de EDOs, así como sobre la interpretación y análisis de los resultados obtenidos.
 
