@@ -4,6 +4,7 @@
 # y'=f(t,y), y(t0)=y0,
 # mediante el metodo RK2(3).
 
+from doctest import NORMALIZE_WHITESPACE
 from pylab import *
 from time import perf_counter
 from matplotlib.pyplot import *
@@ -239,6 +240,7 @@ plot(t[:-1],h[:-1],'*-')# se excluye el ultimo valor de h porque no se usa para 
 xlabel('t')
 ylabel('h')
 legend(['pasos usados'])
+gcf().suptitle("Ejercicio 2")
 show()
 # Calculo del error cometido
 error = max(abs(y-exacta(t)))
@@ -261,7 +263,6 @@ print('-----')
 
 
 # --------- Ejercicio 3 ----------
-
 def f(t,y):
     f1= 3*y[0] - 2*y[1]
     f2= -y[0] +3*y[1] -2*y[2]
@@ -273,8 +274,6 @@ def exacta(t):
     f2=1/4 *exp(5*t) -1/4 * exp(t)
     f3=-1/8 *exp(5*t) -3/4 *exp(3*t) -1/8 * exp(t)
     return(array([f1,f2,f3]))
-
-
 
 def rkSistemas23(a, b, fun, y0, h0, tol):
     
@@ -308,8 +307,6 @@ def rkSistemas23(a, b, fun, y0, h0, tol):
     K = zeros([len(y0),3])
     k = 0 # contador de iteraciones
     
-    
-    
     while (t[k] < b):
         h[k] = min(h[k], b-t[k]) # ajuste del ultimo paso de malla
         for i in range(3):
@@ -318,14 +315,14 @@ def rkSistemas23(a, b, fun, y0, h0, tol):
         incrlow = dot(B,transpose(K)) # metodo de orden 2
         incrhigh = dot(BB,transpose(K)) # metodo de orden 3
             
-        error = norm(h[k]*(incrhigh-incrlow),inf) # estimacion del error
+        error = linalg.norm(h[k]*(incrhigh-incrlow),inf) # estimacion del error
         y = column_stack((y, y[:,k]+h[k]*incrlow))
         t = append(t, t[k]+h[k]); # t_(k+1)
         hnew = 0.9*h[k]*abs(tol/error)**(1./q) # h_(k+1)
         hnew = min(max(hnew,hmin),hmax) # hmin <= h_(k+1) <= hmax
         h = append(h, hnew)
         k += 1
-        
+
     return (t, y, h)
 
 
@@ -338,9 +335,6 @@ y0 = array([1,0,-1]) # condicion inicial
 y0 = y0.reshape(3,1)
 h0 = (b-a)/2000 #paso inicial
 tol = 1.e-6 #tolerancia
-
-
-
 
 
 tini = perf_counter()
@@ -365,6 +359,9 @@ error3= max(abs(y[2]-exacta(t)[2]))
 hn = min(h[:-2]) # minimo valor utilizado del paso de malla
 hm = max(h[:-2]) # maximo valor utilizado del paso de malla
 # se elimina el ultimo h calculado porque no se usa y el penúltimo porque se ha ajustado para terminar en b
+
+gcf().suptitle("Ejercicio 3")
+show()
 
 # Resultados
 print('-----')
