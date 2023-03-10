@@ -7,7 +7,7 @@ Este repositorio contiene una serie de prácticas de la asignatura Análisis Num
 El repositorio contiene las siguientes prácticas:
 
 1. Práctica 1: Métodos unipaso para problemas de valor inicial
-2. Práctica 2: Métodos de Runge-Kutta encajados $ (RKp(p+1)) $
+2. Práctica 2: Métodos de Runge-Kutta encajados (RKp(p+1))
 3. Práctica 3: 
 4. Práctica 4: 
 5. Práctica 5: 
