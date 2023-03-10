@@ -20,11 +20,16 @@ Una vez calculado $y_k$, para estimar el error:
 
     $$t_k^{(i)} = t_k + c_ih $$
 
- - $$ \Phi(t_k, y_k, h_k) = \sum_{i = 1}^s b_if(t_k^{(i)}, y_k^{(i)}) $$
+ - La primera función es: 
+  
+  $$ \Phi(t_k, y_k, h_k) = \sum_{i = 1}^s b_if(t_k^{(i)}, y_k^{(i)}) $$
 
- - $$ \Phi^*(t_k, y_k, h_k) = \sum_{i = 1}^s b_i^*f(t_k^{(i)}, y_k^{(i)}) $$
+ - La segunda función es:
+
+   $$ \Phi^*(t_k, y_k, h_k) = \sum_{i = 1}^s b_i^*f(t_k^{(i)}, y_k^{(i)}) $$
 
  - Por tanto, el error es:
+  
   $$ \~{\epsilon}_k = h_k\sum_{i = 1}^s(b_i^*-b_i)f(t_k^{(i)}, y_k^{(i)}) = h_k(\Phi^*(t_k, y_k, h_k) - \Phi(t_k, y_k, h_k))$$
 
 
