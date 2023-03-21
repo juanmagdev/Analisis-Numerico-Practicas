@@ -24,7 +24,7 @@ def rkSistemas45(a, b, fun, y0, h0, tol):
     hmax = 0.1 # paso de malla maximo
 
     
-    # coeficientes RK
+    # coeficientes RK45
     q = 6 # orden del metodo mas uno
     A = zeros([q, q])
     A[1, 0] = 1/4
@@ -102,7 +102,7 @@ tini = perf_counter()
 (t2, y2, h2) = rkSistemas45(a, b, f2, y0, h0, tol) # llamada al metodo RK4(5)
 tfin = perf_counter()
 
-figure('Apartado a')
+figure('Ejercicio 1a')
 subplot(311)
 plot(t1,y1[0],t2,y2[0]) 
 legend(['(1)','(3)'])
@@ -115,3 +115,36 @@ legend(['(1)','(3)'])
 
 gcf().suptitle("Ejercicio 1a")
 show()
+
+# b)
+# Datos del problema
+a = 0 # extremo inferior del intervalo
+b = 4 # extremo superior del intervalo
+y0 = array([pi,10]) # condicion inicial
+y0 = y0.reshape(2,1)
+h0 = 0.03 #paso inicial
+tol = 1.e-6 #tolerancia
+
+
+
+tini = perf_counter()
+(t1, y1, h1) = rkSistemas45(a, b, f1, y0, h0, tol) # llamada al metodo RK4(5)
+(t2, y2, h2) = rkSistemas45(a, b, f2, y0, h0, tol) # llamada al metodo RK4(5)
+tfin = perf_counter()
+
+figure('Ejercicio 1b')
+subplot(311)
+plot(t1,y1[0],t2,y2[0]) 
+legend(['(1)','(3)'])
+subplot(312)
+plot(y1[0],y1[1], y2[0],y2[1])
+legend(['(1)','(3)'])
+subplot(313)
+plot(t1[:-1],h1[:-1],t2[:-1],h2[:-1])# se excluye el ultimo valor de h porque no se usa para avanzar
+legend(['(1)','(3)'])
+
+gcf().suptitle("Ejercicio 1b")
+show()
+
+# Podemos observar que el metodo RK4(5) no es estable para el sistema (3) con condiciones iniciales (pi,10). 
+# Esto se debe a que el sistema (3) tiene un punto de silla en (pi,0) y el metodo RK4(5) no es estable en puntos de silla.
