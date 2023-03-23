@@ -61,7 +61,7 @@ title("X frente a T")
 plot(t, y[0], '-*') # dibuja la solucion aproximada
 plot(t, ye[0], 'k') # dibuja la solucion exacta
 xlabel('t')
-ylabel('y')
+ylabel('x')
 legend(['RK', 'exacta'])
 grid(True)
 
@@ -135,4 +135,120 @@ for N in malla:
     print('Paso de malla: ' + str((b-a)/N))
     print('-----')
 
+show()
+
+def rk23Sis(a, b, fun, y0, h0, tol):
+
+    hmin = (b-a)*1.e-5  # paso de malla minimo
+    hmax = (b-a)/10.  # paso de malla maximo
+
+    # coeficientes RK
+    q = 3  # orden del metodo mas uno
+    A = zeros([q, q])
+    A[1, 0] = 1./2.
+    A[2, 0] = -1.
+    A[2, 1] = 2.
+
+    B = zeros(q)
+    B[1] = 1.
+
+    BB = zeros(q)
+    BB[0] = 1./6.
+    BB[1] = 2./3.
+    BB[2] = 1./6.
+
+    C = zeros(q)
+    for i in range(q):
+        C[i] = sum(A[i, :])
+
+    # inicializacion de variables
+    t = array([a])  # nodos
+    y = y0.reshape(len(y0), 1)  # soluciones
+    h = array([h0])  # pasos de malla
+    K = zeros([len(y0), 3])
+    k = 0  # contador de iteraciones
+
+    while (t[k] < b):
+        h[k] = min(h[k], b-t[k])  # ajuste del ultimo paso de malla
+        for i in range(3):
+            K[:, i] = fun(t[k]+C[i]*h[k], y[:, k]+h[k]
+                          * dot(A[i, :], transpose(K)))
+
+        incrlow = dot(B, transpose(K))  # metodo de orden 2
+        incrhigh = dot(BB, transpose(K))  # metodo de orden 3
+
+        error = linalg.norm(h[k]*(incrhigh-incrlow), inf)  # estimacion del error
+        y = column_stack((y, y[:, k]+h[k]*incrlow))
+        t = append(t, t[k]+h[k])  # t_(k+1)
+        hnew = 0.9*h[k]*abs(tol/error)**(1./q)  # h_(k+1)
+        hnew = min(max(hnew, hmin), hmax)  # hmin <= h_(k+1) <= hmax
+        h = append(h, hnew)
+        k += 1
+
+    return (t, y, h)
+
+tol = 1.e-6
+h0 = 0.01
+
+
+tini = perf_counter()           # tiempo inicial
+
+(t, y, h) = rk23Sis(a, b, f, y0, h0, tol) # llamada al metodo de RK4
+
+tfin=perf_counter()             # tiempo final
+
+ye = exacta(t) # calculo de la solucion exacta
+
+# Dibujamos las soluciones
+figure("2")
+subplot(2, 2, 1)
+title("X frente a T")
+plot(t, y[0], '-*') # dibuja la solucion aproximada
+plot(t, ye[0], 'k') # dibuja la solucion exacta
+xlabel('t')
+ylabel('x')
+legend(['RK', 'exacta'])
+grid(True)
+
+subplot(2, 2, 2)
+title("Y frente a T")
+plot(t, y[1], '-*') # dibuja la solucion aproximada
+plot(t, ye[1], 'k') # dibuja la solucion exacta
+xlabel('t')
+ylabel('y')
+legend(['RK', 'exacta'])
+grid(True)
+
+subplot(2, 2, 3)
+title("Orbitas")
+plot(y[0], y[1], '-*') # dibuja la solucion aproximada
+plot(ye[0], ye[1], 'k') # dibuja la solucion exacta
+xlabel('x')
+ylabel('y')
+legend(['RK', 'exacta'])
+grid(True)
+
+subplot(2, 2, 4)
+title("Pasos hk")
+plot(t, h, '-*') # dibuja la solucion aproximada
+xlabel('t')
+ylabel('h')
+legend(['RK', 'exacta'])
+grid(True)
+
+subplots_adjust(hspace=0.8)
+subplots_adjust(wspace=0.3)
+
+# Calculo del error cometido
+error = max(abs(y[0]-ye[0]))
+
+# Resultados
+print('-----')
+print('Tiempo CPU: ' + str(tfin-tini))
+print('Error: ' + str(error))
+print('Paso de malla: ' + str((b-a)/N))
+print('-----')
+
+
+# gcf().tight_layout()
 show()

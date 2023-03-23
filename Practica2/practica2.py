@@ -138,7 +138,7 @@ def exacta(t):
 
 
 def rk45(a, b, fun, y0, h0, tol):
-    """Implementacion del metodo encajado RK2(3)
+    """Implementacion del metodo encajado RK4(5)
     en el intervalo [a, b] con condicion inicial y0,
     paso inicial h0 y tolerancia tol"""
     

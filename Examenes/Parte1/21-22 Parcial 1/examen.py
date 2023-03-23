@@ -2,11 +2,14 @@ from time import perf_counter
 from matplotlib.pyplot import *
 from numpy import *
 
+# y′ = 1 − 10y,
+# y(0) = 1.
 def f(t, y):
-    return -9*y
+    return 1 - 10*y
 
+# EDO de variables separables, resuelta a papel:
 def exacta(t):
-    return exp(-9*t)
+    return (9*exp(-10*t)  +1)/10
 
 def rk(a, b, fun, N, y0):
     """Implementacion del metodo de RK4 en el intervalo [a, b]
@@ -20,17 +23,23 @@ def rk(a, b, fun, N, y0):
 
     # Metodo de RK
     for k in range(N):
-        k1 = fun(t[k] +h/3, y[k]/(1+3*h))
-        k2 = fun(t[k] +(2*h)/3, y[k]/(1+3*h)+ (h*k1)/(3/1+3*h))
+        # t1= t[k] +h/3
+        # y1 = y[k] + 1/3*h*fun(y1, y1)
+        # y1 = y[k] + 1/3*h*(1-10*y1)
+        # y1 = y[k] + 1/3*h - 1/3*h*10*y1
+        # ...
+
+        k1 = fun(t[k] +h/3, (y[k] + h/3)/1  + 10*h/3)
         t[k+1] = t[k] + h
-        y[k+1] = y[k]+(h/2) * (k1+ k2)
+        y[k+1] = y[k]+(h) * (k1)
     return (t, y)
 
 
+# apartado b)
 # Datos del problema
-a = 0
+a = 0   
 b  =2
-malla = [10, 20, 40, 80, 160]
+malla = [20, 40, 80, 160, 320, 640, 1280]
 y0 = 1
 
 for N in malla:
@@ -44,10 +53,9 @@ for N in malla:
 
     # Dibujamos las soluciones
     plot(t, y, '-*') # dibuja la solucion aproximada
-    plot(t, ye, 'k') # dibuja la solucion exacta
     xlabel('t')
     ylabel('y')
-    legend(['RK', 'exacta'])
+    # legend(['RK', 'exacta'])
     grid(True)
 
     # Calculo del error cometido
@@ -58,56 +66,42 @@ for N in malla:
     print('Tiempo CPU: ' + str(tfin-tini))
     print('Error: ' + str(error))
     print('Paso de malla: ' + str((b-a)/N))
-    print('-----')
 
-gcf().suptitle("Ejercicio 1")
-show() # muestra la grafica
+leyenda = ['RK, N=' + str(N) for N in malla]
+leyenda.append('Exacta')
+legend(leyenda)
+plot(t, ye, 'k') # dibuja la solucion exacta
+show()
+
 
 # Ejercicio 2
+
+# y′′ + 4y′ + 29y = 0
 def f(t, y):
     f1 = y[1]
-    f2 = 2*(y[0]-t)*(y[1]-1)
-    return(array([f1,f2]))
+    f2 = -4*y[1] - 29*y[0]
+    return array([f1, f2])
 
+# y(t) = e−2t cos(5t)
 def exacta(t):
-    return tan(t)+t
+    return exp(-2*t) * cos(5*t)
 
-def rk45Sis(a, b, fun, y0, h0, tol):
+def rk12Sis(a, b, fun, y0, h0, tol):
 
     hmin = 1.e-5  # paso de malla minimo
-    hmax = 0.1  # paso de malla maximo
+    hmax = 1.  # paso de malla maximo
 
     # coeficientes RK
-    q = 6  # orden del metodo mas uno
+    q = 2  # numero de etapas
+    p = 1  # orden del método menos preciso
     A = zeros([q, q])
-    A[1, 0] = 1/4
-    A[2, 0] = 3/32
-    A[2, 1] = 9/32
-    A[3, 0] = 1932/2197
-    A[3, 1] = -7200/2197
-    A[3, 2] = 7296/2197
-    A[4, 0] = 439/216
-    A[4, 1] = -8
-    A[4, 2] = 3680/513
-    A[4, 3] = -845/4104
-    A[5, 0] = -8/27
-    A[5, 1] = 2
-    A[5, 2] = -3544/2565
-    A[5, 3] = 1859/4104
-    A[5, 4] = -11/40
+    A[1, 0] = 1/2.
 
     B = zeros(q)
-    B[0] = 25/216
-    B[2] = 1408/2565
-    B[3] = 2197/4104
-    B[4] = -1/5
+    B[0] = 1.
 
     BB = zeros(q)
-    BB[0] = 16/135
-    BB[2] = 6656/12825
-    BB[3] = 28561/56430
-    BB[4] = -9/50
-    BB[5] = 2/55
+    BB[1] = 1
 
     C = zeros(q)
     for i in range(q):
@@ -132,7 +126,7 @@ def rk45Sis(a, b, fun, y0, h0, tol):
         error = linalg.norm(h[k]*(incrhigh-incrlow), inf)  # estimacion del error
         y = column_stack((y, y[:, k]+h[k]*incrlow))
         t = append(t, t[k]+h[k])  # t_(k+1)
-        hnew = 0.9*h[k]*abs(tol/error)**(1./5)  # h_(k+1)
+        hnew = 0.9*h[k]*abs(tol/error)**(1./(p+1))  # h_(k+1)
         hnew = min(max(hnew, hmin), hmax)  # hmin <= h_(k+1) <= hmax
         h = append(h, hnew)
         k += 1
@@ -141,46 +135,40 @@ def rk45Sis(a, b, fun, y0, h0, tol):
 
 
 # Datos del problema
-a = 0 # extremo inferior del intervalo
-b = 1.3 # extremo superior del intervalo
-y0 = array([0,2]) # condicion inicial
-h0 = 2.e-4 # paso de malla inicial
-tol = 1.e-5 # tolerancia
+a = 0
+b = 5
+y0 = array([1, -2])
+h0 = 0.003
+tol = 1.e-5
 
 
 tini = perf_counter()
-(t, y, h) = rk45Sis(a, b, f, y0, h0, tol) 
+(t, y, h) = rk12Sis(a, b, f, y0, h0, tol) 
 tfin = perf_counter()
 
 ye = exacta(t) # calculo de la solucion exacta
 
 # Calculo del error cometido
-# error = max(abs(y-ye))
+error = max(abs(y[0]-ye))
 
 # Resultados
 print('-----')
 print('Tiempo CPU: ' + str(tfin-tini))
-# print('Error: ' + str(error))
+print('Error: ' + str(error))
 print('Paso de malla: ' + str((b-a)/N))
 print('-----')
 
-# Dibujamos las soluciones
-figure('Ejercicio 1a')
-subplot(211)
-grid(True)
-# Dibujamos las soluciones
+subplot(2, 1, 1)
+title("exacta y RK12")
 plot(t, y[0], '-*') # dibuja la solucion aproximada
 plot(t, ye, 'k') # dibuja la solucion exacta
 xlabel('t')
 ylabel('y')
-legend(['RK45', 'exacta'])
-
+legend(['RK12', 'exacta'])
 
 subplot(212)
-plot(t, h) 
+title("Pasos hk")
+plot(t[:-1], h[:-1]) 
 
-gcf().suptitle("Ejercicio 2")
+subplots_adjust(hspace=0.8)
 show()
-
-# Con la evolución de los pasos se puede observar que con el paso del tiempo disminuye, esto se debe a que en algun momento, 
-# el error es menor que la tolerancia y por lo tanto se disminuye el paso de malla para que el error sea menor que la tolerancia.
