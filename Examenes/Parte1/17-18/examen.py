@@ -2,12 +2,18 @@ from time import perf_counter
 from matplotlib.pyplot import *
 from numpy import *
 
+# x′′ + 20x′ + 101x = 0
+# X = y[0]
+# x' = y[1]
+
 def f(t, y):
+    """Definicion del sistema de ecuaciones diferenciales"""
     f1 = y[1]
     f2 = -20*y[1] - 101*y[0]
     return array([f1, f2])
 
 def exacta(t):
+    """Definicion de la solucion exacta"""
     return exp(-10*t) * (cos(t))
 
 def rk4Sis(a, b, fun, N, y0):
