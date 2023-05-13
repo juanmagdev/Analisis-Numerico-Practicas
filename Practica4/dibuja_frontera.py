@@ -1,11 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun May 17 11:38:44 2020
-
-@author: Usuario
-"""
-
-from pylab import *
+from numpy import *
+from matplotlib.pyplot import *
     
 
 
