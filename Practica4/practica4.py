@@ -177,7 +177,7 @@ def f(t, y):
 
 def solucion_exacta(t):
     return 5/3 - 1495/3597 * exp(-1200*t) - 1500/1199 * exp(-t)
-
+    
 # Apartado a)
 subplot(121)
 localizar_frontera_RK(lambda z : 1, 1)
