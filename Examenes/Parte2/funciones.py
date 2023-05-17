@@ -545,3 +545,66 @@ def BDF5sis(a,b,N,y0,fun):
     maxiter = max(l)
     return(t,y,maxiter)
 
+
+# Matriz y autovalores
+localizar_frontera(array([1, -1, 0, 0, 0]), array([0, 55, -59, 37, - 9])/24) # AB4
+
+title("Frontera AB4")
+# show()
+
+A = array([[0, 1], [-101, -20]])
+print("Matriz A:\n", A)
+print("Autovalores de A:", eig(A)[0])
+
+rel, iml = -0.5, 3.1225
+# Obtenemos h para llevar las raíces a la frontera
+h = 0.1 ## estimar h
+plot(h*rel, h*iml, ".", h*rel, -h*iml, ".")
+show()
+
+
+# Ejercicio 1
+# Fronteras RK
+localizar_frontera_RK(lambda z : 1, 1)
+localizar_frontera_RK(lambda z : 1 + z, 2)
+localizar_frontera_RK(lambda z : 1 + z + z**2/2, 3)
+localizar_frontera_RK(lambda z : 1 + z + z**2/2 + z**3/6, 4)
+localizar_frontera_RK(lambda z : 1 + z + z**2/2 + z**3/6 + z**4/24, 5)
+
+title("Fronteras RK")
+legend(["RK1", "RK2", "RK3", "RK4", "RK5"])
+show()
+
+# Fronteras AB
+localizar_frontera(array([1, -1]), array([0, 1])) # AB1
+localizar_frontera(array([1, -1, 0]), array([0, 3, -1])/2) # AB2
+localizar_frontera(array([1, -1, 0, 0]), array([0, 23, -16, 5])/12) # AB3
+localizar_frontera(array([1, -1, 0, 0, 0]), array([0, 55, -59, 37, - 9])/24) # AB4
+localizar_frontera(array([1, -1, 0, 0, 0, 0]), array([0, 1901, -2774, 2616, -1274, 251])/720) # AB5
+
+title("Fronteras AB")
+legend(["AB1", "AB2", "AB3", "AB4", "AB5"])
+show()
+
+# Fronteras AM
+localizar_frontera(array([1, -1]), array([1, 1])/2) # AM1
+localizar_frontera(array([1, -1, 0]), array([5, 8, -1])/12) # AM2
+localizar_frontera(array([1, -1, 0, 0]), array([9, 19, -5, 1])/24) # AM3
+localizar_frontera(array([1, -1, 0, 0, 0]), array([251, 646, -264, 106, -19])/720) # AM4
+
+title("Fronteras AM")
+axis([-6, 0, -4, 4])
+legend(["AM1", "AM2", "AM3", "AM4"])
+show()
+
+# Fronteras diferenciación regresiva
+localizar_frontera(array([1, -1]), array([1, 0])) # DR1
+localizar_frontera(array([3, -4, 1])/3, array([2, 0, 0])/3) # DR2
+localizar_frontera(array([11, -18, 9, -2])/11, array([6, 0, 0, 0])/11) # DR3
+localizar_frontera(array([25, -48, 36, -16, 3])/25, array([12, 0, 0, 0, 0])/25) #DR4
+localizar_frontera(array([137, -300, 300, -200, 75, -12])/137, array([60, 0, 0, 0, 0, 0])/137) # DR5
+localizar_frontera(array([147, -360, 450, -400, 225, -72, 10])/147, array([60, 0, 0, 0, 0, 0, 0])/147) # DR6
+
+title("Fronteras DR")
+legend(["DR1", "DR2", "DR3", "DR4", "DR5", "DR6"])
+show()

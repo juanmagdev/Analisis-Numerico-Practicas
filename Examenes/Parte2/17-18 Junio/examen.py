@@ -111,9 +111,15 @@ show() # muestra la grafica
 # Ejercicio 5
 localizar_frontera(array([1, -1, 0, 0, 0]), array([0, 55, -59, 37, - 9])/24) # AB4Sis
 title("Frontera AB4")
-show()
+
 
 A = array([[0, 1], [-101, -20]])
 print("Matriz A:\n", A)
 print("Autovalores de A:", eig(A)[0])
+
+rel, iml = -10, 1
+# Obtenemos h para llevar las raíces a la frontera
+h = 0.0299 ## estimar h
+plot(h*rel, h*iml, ".", h*rel, -h*iml, ".")
+show()
 

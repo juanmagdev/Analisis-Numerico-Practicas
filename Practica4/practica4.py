@@ -245,18 +245,19 @@ for N in malla:
 plot(t, solucion_exacta(t))
 
 title("Método RK4")
+
 legend(["N = " + str(N) for N in malla] + ["Exacta"])
 grid(True)
 show()
 
 # Apartado d)
 
-# Método AB3
+    # Método AB3
 subplot(121)
 localizar_frontera(array([1, -1, 0, 0]), array([0, 23, -16, 5])/12)
 rel, iml = -1200, 0
 h = 0.00045 # Obtenemos h para llevar las raíces a la frontera
-plot(h*rel, h*iml, "o")
+plot(h*rel, h*iml, "o") # los autovalores coinciden
 
 N_critico = int((b-a)/h)
 malla = [N_critico-10, N_critico, N_critico+10]
